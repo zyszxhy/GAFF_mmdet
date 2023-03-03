@@ -1,4 +1,4 @@
-checkpoint_path = './GAFF_mmdetection/ckps/retinanet_r18_fpn_1x_coco_20220407_171055-614fd399.pth'
+checkpoint_path = './GAFF_mmdet/ckps/retinanet_r18_fpn_1x_coco_20220407_171055-614fd399.pth'
 # custom_imports = dict(
 #     imports=['.mmdet.models.necks.gaff_blocks',
 #     '.mmdet.models.detectors.gaff_detector'],
@@ -10,7 +10,7 @@ model = dict(
         depth=18,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
-        frozen_stages=0,
+        frozen_stages=-1,
         norm_cfg=dict(type='BN', requires_grad=True),
         norm_eval=True,
         style='pytorch',
@@ -20,13 +20,13 @@ model = dict(
         depth=18,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
-        frozen_stages=0,
+        frozen_stages=-1,
         norm_cfg=dict(type='BN', requires_grad=True),
         norm_eval=True,
         style='pytorch',
         init_cfg=dict(type='Pretrained', checkpoint=checkpoint_path, prefix='backbone.')),
 
-    neck_visible=dict(
+    neck=dict(  # _visible
         type='FPN',
         # ResNet 模块输出的4个尺度特征图通道数
         in_channels=[64, 128, 256, 512],
@@ -41,26 +41,26 @@ model = dict(
         # init_cfg=dict(type='Pretrained', checkpoint=checkpoint_path, prefix='neck.')
         init_cfg=dict(type='Xavier', layer='Conv2d', distribution='uniform')
         ),
-    neck_lwir=dict(
-        type='FPN',
-        # ResNet 模块输出的4个尺度特征图通道数
-        in_channels=[64, 128, 256, 512],
-        # FPN 输出的每个尺度输出特征图通道
-        out_channels=256,
-        # 从输入多尺度特征图的第几个开始计算
-        start_level=1,
-        # 额外输出层的特征图来源
-        add_extra_convs='on_input',
-        # FPN 输出特征图个数
-        num_outs=5,
-        # init_cfg=dict(type='Pretrained', checkpoint=checkpoint_path, prefix='neck.')
-        init_cfg=dict(type='Xavier', layer='Conv2d', distribution='uniform')
-        ),
+    # neck_lwir=dict(
+    #     type='FPN',
+    #     # ResNet 模块输出的4个尺度特征图通道数
+    #     in_channels=[64, 128, 256, 512],
+    #     # FPN 输出的每个尺度输出特征图通道
+    #     out_channels=256,
+    #     # 从输入多尺度特征图的第几个开始计算
+    #     start_level=1,
+    #     # 额外输出层的特征图来源
+    #     add_extra_convs='on_input',
+    #     # FPN 输出特征图个数
+    #     num_outs=5,
+    #     # init_cfg=dict(type='Pretrained', checkpoint=checkpoint_path, prefix='neck.')
+    #     init_cfg=dict(type='Xavier', layer='Conv2d', distribution='uniform')
+    #     ),
 
     gaff=dict(
         type='GAFF',
-        num_ins=5,
-        in_channels=256,
+        num_ins=4,
+        in_channels=[64, 128, 256, 512],
         init_cfg=dict(type='Xavier', layer='Conv2d', distribution='uniform')
     ),
 
@@ -100,7 +100,7 @@ model = dict(
         activate=False,
         reduction='mean',
         naive_dice=False,
-        loss_weight=1.0,
+        loss_weight=0.5,
         eps=1e-3),
     
     loss_inter=dict(

@@ -1,4 +1,4 @@
-checkpoint_path = './GAFF_mmdetection/ckps/retinanet_r50_fpn_1x_coco_20200130-c2398f9e.pth'
+checkpoint_path = './GAFF_mmdet/ckps/retinanet_r50_fpn_1x_coco_20200130-c2398f9e.pth'
 
 model = dict(
     type='GAFFDetector',
@@ -61,7 +61,7 @@ model = dict(
     gaff=dict(
         type='GAFF',
         num_ins=5,
-        in_channels=256,
+        in_channels=[256, 256, 256, 256, 256],
         init_cfg=dict(type='Xavier', layer='Conv2d', distribution='uniform')
     ),
 
@@ -101,7 +101,7 @@ model = dict(
         activate=False,
         reduction='mean',
         naive_dice=False,
-        loss_weight=1.0,
+        loss_weight=0.1,
         eps=1e-3),
     
     loss_inter=dict(
