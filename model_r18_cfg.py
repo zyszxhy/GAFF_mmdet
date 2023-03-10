@@ -100,7 +100,7 @@ model = dict(
         activate=False,
         reduction='mean',
         naive_dice=False,
-        loss_weight=0.5,
+        loss_weight=0.01,
         eps=1e-3),
     
     loss_inter=dict(
@@ -110,7 +110,7 @@ model = dict(
         reduction='mean',
         class_weight=None,
         ignore_index=2,
-        loss_weight=1.0,
+        loss_weight=0.1,
         avg_non_ignore=False
     ),
 

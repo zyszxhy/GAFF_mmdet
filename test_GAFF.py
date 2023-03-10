@@ -159,15 +159,15 @@ def main():
         cfg.model.backbone_visible.init_cfg = None
         cfg.model.backbone_lwir.init_cfg = None
 
-    if cfg.model.get('neck_visible'):
-        if isinstance(cfg.model.neck_visible, list):
-            for neck_cfg in cfg.model.neck_visible:
+    if cfg.model.get('neck'):
+        if isinstance(cfg.model.neck, list):
+            for neck_cfg in cfg.model.neck:
                 if neck_cfg.get('rfp_backbone'):
                     if neck_cfg.rfp_backbone.get('pretrained'):
                         neck_cfg.rfp_backbone.pretrained = None
-        elif cfg.model.neck_visible.get('rfp_backbone'):
-            if cfg.model.neck_visible.rfp_backbone.get('pretrained'):
-                cfg.model.neck_visible.rfp_backbone.pretrained = None
+        elif cfg.model.neck.get('rfp_backbone'):
+            if cfg.model.neck.rfp_backbone.get('pretrained'):
+                cfg.model.neck.rfp_backbone.pretrained = None
 
     if args.gpu_ids is not None:
         cfg.gpu_ids = args.gpu_ids[0:1]
